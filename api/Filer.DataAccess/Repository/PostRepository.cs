@@ -11,22 +11,22 @@ public class PostRepository : IPostRepository{
         this.postContext = postContext;
     }
 
-    public void Create(Post entity)
+    public async Task Create(Post entity)
     {
-        postContext.PostEntities.Add(new PostEntity{Tag = entity.Tag});
+        await postContext.PostEntities.AddAsync(new PostEntity{Tag = entity.Tag});
     }
 
-    public void Delete(int id)
+    public async Task Delete(int id)
     {
-        var entity = postContext.PostEntities.Find(id);
+        var entity = await postContext.PostEntities.FindAsync(id);
         if(entity != null){
             postContext.PostEntities.Remove(entity);
         }
     }
 
-    public Post Get(int id)
+    public async Task<Post> Get(int id)
     {
-        var post = postContext.PostEntities.Find(id);
+        var post = await postContext.PostEntities.FindAsync(id);
         if (post != null)
         {
             return Post.CreatePost(post.Id, post.Tag);
@@ -36,21 +36,21 @@ public class PostRepository : IPostRepository{
         }
     }
 
-    public IEnumerable<Post> GetAll()
+    public async Task<IEnumerable<Post>> GetAll()
     {
-        return postContext.PostEntities.AsNoTracking().Select(p => Post.CreatePost(p.Id, p.Tag));
+        return await postContext.PostEntities.AsNoTracking().Select(p => Post.CreatePost(p.Id, p.Tag)).ToListAsync();
     }
 
-    public void Update(Post entity)
+    public async Task Update(Post entity)
     {
-        var post = postContext.PostEntities.Find(entity.Id);        
+        var post = await postContext.PostEntities.FindAsync(entity.Id);        
         if(post != null){
             post.Tag = entity.Tag;
             postContext.PostEntities.Update(post);
         }
         
     }
-    public void Save(){
-        postContext.SaveChanges();
+    public async Task Save(){
+        await postContext.SaveChangesAsync();
     }
 }

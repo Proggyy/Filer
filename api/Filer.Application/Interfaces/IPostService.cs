@@ -3,6 +3,9 @@ using Filer.Domain.Domain;
 namespace Filer.Application.Interfaces;
 
 public interface IPostService{
-    Post GetPost(int id);
-    void CreatePost(Post post);
+    Task<IEnumerable<Post>> GetAllPosts();
+    Task<Post> GetPost(int id);
+    Task CreatePost(Post post);
+    Task DeletePost(int id);
+    Task UpdatePost(Post post);
 }
