@@ -29,7 +29,8 @@ public class PostRepository : IPostRepository{
         var post = await postContext.PostEntities.FindAsync(id);
         if (post != null)
         {
-            return Post.CreatePost(post.Id, post.Tag);
+            return post.HasImage ? Post.CreatePost(post.Id, post.Tag!, post.ImagePath, post.Description, post.CreationDate) 
+            : Post.CreatePostWithoutImage(post.Id, post.Tag!, post.Description, post.CreationDate);
         }
         else{
             return new Post();
@@ -38,7 +39,11 @@ public class PostRepository : IPostRepository{
 
     public async Task<IEnumerable<Post>> GetAll()
     {
-        return await postContext.PostEntities.AsNoTracking().Select(p => Post.CreatePost(p.Id, p.Tag)).ToListAsync();
+        return await postContext.PostEntities.AsNoTracking()
+        .Select(post => post.HasImage ? 
+        Post.CreatePost(post.Id, post.Tag!, post.ImagePath, post.Description, post.CreationDate) 
+            : Post.CreatePostWithoutImage(post.Id, post.Tag!, post.Description, post.CreationDate))
+        .ToListAsync();
     }
 
     public async Task Update(Post entity)

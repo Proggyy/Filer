@@ -15,22 +15,22 @@ namespace MyApp.Namespace
             this.postService = postService;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAll(int id){
+        public async Task<IActionResult> GetAll(){
             var posts = await postService.GetAllPosts();
-            return Ok(posts.Select(p => new PostDto{Id = p.Id, Tag = p.Tag}));
+            return Ok(posts.Select(post => new PostDto(post.Id,post.Tag!, post.Description)));
         }
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id){
             var post = await postService.GetPost(id);
-            return Ok(new PostDto{Id = post.Id, Tag = post.Tag});
+            return Ok(new PostDto(post.Id,post.Tag!, post.Description));
         }
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]CreatePostDto postDto){
-            await postService.CreatePost(new Post{Tag = postDto.Tag});            
+            await postService.CreatePost(new Post{Tag = postDto.Tag, Description = postDto.Description, CreationDate = DateTimeOffset.Now});            
             return Ok();
         }
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update([FromQuery] int id,[FromBody] CreatePostDto postDto){
+        public async Task<IActionResult> Update([FromRoute] int id,[FromBody] CreatePostDto postDto){
             var post = await postService.GetPost(id);
             if(post != null){
                 post.Tag = postDto.Tag;

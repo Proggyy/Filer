@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Filer.DataAccess.DatabaseConfiguration;
+using Microsoft.EntityFrameworkCore;
 
 namespace Filer.DataAccess;
 public class PostContext : DbContext
@@ -10,7 +11,6 @@ public class PostContext : DbContext
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<PostEntity>().Property(e => e.Id).UseIdentityColumn();
-        modelBuilder.Entity<PostEntity>().HasData(new PostEntity{Id = 1, Tag = "tag"});
+        modelBuilder.ApplyConfiguration(new PostEntityConfiguration());
     }
 }

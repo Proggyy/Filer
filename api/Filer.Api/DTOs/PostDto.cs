@@ -1,6 +1,6 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Filer.Api.DTOs;
 
-public class PostDto{
-    public int Id { get; set;}
-    public string Tag { get; set;} = "";
-}
+public record PostDto(int Id,string Tag, string Description);
+public record CreatePostDto([Required]string Tag, string Description);
