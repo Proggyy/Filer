@@ -7,7 +7,7 @@ public class Post{
     [Key]
     public int Id { get; set;}
     [Required(ErrorMessage = "Tag is a required field.")]
-    [StringLength(100, MinimumLength = 3, ErrorMessage = "The tag can contain from 3 to 100 characters")]
+    [StringLength(100, MinimumLength = 3, ErrorMessage = "Tag can contain from 3 to 100 characters")]
     public string? Tag { get; set;}
     public bool HasImage => ImagePath != "";
     public string ImagePath { get; set;} = "";

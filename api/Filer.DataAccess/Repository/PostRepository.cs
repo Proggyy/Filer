@@ -13,7 +13,10 @@ public class PostRepository : IPostRepository{
 
     public async Task Create(Post entity)
     {
-        await postContext.PostEntities.AddAsync(new PostEntity{Tag = entity.Tag});
+        await postContext.PostEntities.AddAsync(new PostEntity{Tag = entity.Tag,
+         ImagePath = entity.ImagePath,
+         Description = entity.Description,
+         CreationDate = entity.CreationDate});
     }
 
     public async Task Delete(int id)
@@ -51,6 +54,8 @@ public class PostRepository : IPostRepository{
         var post = await postContext.PostEntities.FindAsync(entity.Id);        
         if(post != null){
             post.Tag = entity.Tag;
+            post.ImagePath = entity.ImagePath;
+            post.Description = entity.Description;
             postContext.PostEntities.Update(post);
         }
         

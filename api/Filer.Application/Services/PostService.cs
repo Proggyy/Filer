@@ -10,29 +10,29 @@ public class PostService : IPostService
     {
         this.postRepository = postRepository;
     }
-    public async Task CreatePost(Post post)
+    public async Task Create(Post post)
     {
         await postRepository.Create(post);
         await postRepository.Save();
     }
 
-    public async Task DeletePost(int id)
+    public async Task Delete(int id)
     {
         await postRepository.Delete(id);
         await postRepository.Save();
     }
 
-    public async Task<IEnumerable<Post>> GetAllPosts()
+    public async Task<IEnumerable<Post>> GetAll()
     {
         return await postRepository.GetAll();
     }
 
-    public async Task<Post> GetPost(int id)
+    public async Task<Post> Get(int id)
     {
         return await postRepository.Get(id);
     }
 
-    public async Task UpdatePost(Post post)
+    public async Task Update(Post post)
     {
         await postRepository.Update(post);
         await postRepository.Save();
