@@ -16,6 +16,8 @@ var connectionString = builder.Configuration.GetSection("ConnectionString").Valu
 builder.Services.AddNpgsql<PostContext>(connectionString);
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
