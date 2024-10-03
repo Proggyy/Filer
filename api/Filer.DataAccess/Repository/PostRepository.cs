@@ -16,7 +16,8 @@ public class PostRepository : IPostRepository{
         await postContext.PostEntities.AddAsync(new PostEntity{Tag = entity.Tag,
          ImagePath = entity.ImagePath,
          Description = entity.Description,
-         CreationDate = entity.CreationDate});
+         CreationDate = entity.CreationDate, 
+         UserId = entity.Creator!.Id});
     }
 
     public async Task Delete(int id)
@@ -29,11 +30,11 @@ public class PostRepository : IPostRepository{
 
     public async Task<Post> Get(int id)
     {
-        var post = await postContext.PostEntities.FindAsync(id);
+        var post = await postContext.PostEntities.Include(p => p.UserEntity).AsNoTracking().FirstAsync(p => p.Id == id);
         if (post != null)
         {
-            return post.HasImage ? Post.CreatePost(post.Id, post.Tag!, post.ImagePath, post.Description, post.CreationDate) 
-            : Post.CreatePostWithoutImage(post.Id, post.Tag!, post.Description, post.CreationDate);
+            return post.HasImage ? Post.CreatePost(post.Id, post.Tag!, post.ImagePath, post.Description, post.CreationDate, User.CreateUser(post.UserEntity!.Id, post.UserEntity.UserName!, post.UserEntity.Login!)) 
+            : Post.CreatePostWithoutImage(post.Id, post.Tag!, post.Description, post.CreationDate, User.CreateUser(post.UserEntity!.Id, post.UserEntity.UserName!, post.UserEntity.Login!));
         }
         else{
             return new Post();
@@ -42,10 +43,10 @@ public class PostRepository : IPostRepository{
 
     public async Task<IEnumerable<Post>> GetAll()
     {
-        return await postContext.PostEntities.AsNoTracking()
+        return await postContext.PostEntities.Include(p => p.UserEntity).AsNoTracking()
         .Select(post => post.HasImage ? 
-        Post.CreatePost(post.Id, post.Tag!, post.ImagePath, post.Description, post.CreationDate) 
-            : Post.CreatePostWithoutImage(post.Id, post.Tag!, post.Description, post.CreationDate))
+        Post.CreatePost(post.Id, post.Tag!, post.ImagePath, post.Description, post.CreationDate, User.CreateUser(post.UserEntity!.Id, post.UserEntity.UserName!, post.UserEntity.Login!)) 
+            : Post.CreatePostWithoutImage(post.Id, post.Tag!, post.Description, post.CreationDate, User.CreateUser(post.UserEntity!.Id, post.UserEntity.UserName!, post.UserEntity.Login!)))
         .ToListAsync();
     }
 
@@ -56,6 +57,7 @@ public class PostRepository : IPostRepository{
             post.Tag = entity.Tag;
             post.ImagePath = entity.ImagePath;
             post.Description = entity.Description;
+            post.UserId = entity.Creator!.Id;
             postContext.PostEntities.Update(post);
         }
         

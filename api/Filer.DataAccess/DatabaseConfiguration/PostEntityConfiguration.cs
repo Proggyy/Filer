@@ -13,7 +13,9 @@ public class PostEntityConfiguration : IEntityTypeConfiguration<PostEntity>
             Tag = "tag", 
             CreationDate = DateTimeOffset.MinValue,
             Description = "testDescription", 
-            ImagePath = "testPath"}
+            ImagePath = "testPath",
+            UserId = 1
+            }
         );
     }
 }

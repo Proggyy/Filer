@@ -15,13 +15,15 @@ public class Post{
     public string Description { get; set;} = "";
     [Required]
     public DateTimeOffset CreationDate { get; set; }
+    [Required]
+    public User? Creator { get; set; }
 
-    public static Post CreatePost(int id, string tag, string imagePath, string description, DateTimeOffset createdate) 
+    public static Post CreatePost(int id, string tag, string imagePath, string description, DateTimeOffset createdate, User creator) 
     {
-        return new Post{Id = id, Tag = tag, Description = description, CreationDate = createdate, ImagePath = imagePath};
+        return new Post{Id = id, Tag = tag, Description = description, CreationDate = createdate, ImagePath = imagePath, Creator = creator};
     }   
-    public static Post CreatePostWithoutImage(int id, string tag, string description, DateTimeOffset createdate) 
+    public static Post CreatePostWithoutImage(int id, string tag, string description, DateTimeOffset createdate, User creator) 
     {
-        return new Post{Id = id, Tag = tag, Description = description, CreationDate = createdate};
+        return new Post{Id = id, Tag = tag, Description = description, CreationDate = createdate, Creator = creator};
     }  
 }

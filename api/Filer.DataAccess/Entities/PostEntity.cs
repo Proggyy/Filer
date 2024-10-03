@@ -16,4 +16,7 @@ public class PostEntity{
     public string Description { get; set;} = "";
     [Required]
     public DateTimeOffset CreationDate { get; set; }
+    [ForeignKey(nameof(UserEntity))]
+    public int UserId { get; set; }
+    public UserEntity? UserEntity { get; set; }
 }
