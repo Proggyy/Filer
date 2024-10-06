@@ -1,3 +1,4 @@
+using AutoMapper;
 using Filer.Api.DTOs;
 using Filer.Application.Interfaces;
 using Filer.Domain.Domain;
@@ -11,20 +12,22 @@ namespace MyApp.Namespace
     {
         private readonly IUserService userService;
         private readonly IPostService postService;
-        public PostController(IPostService postService, IUserService userService)
+        private readonly IMapper mapper;
+        public PostController(IPostService postService, IUserService userService, IMapper mapper)
         {
             this.postService = postService;
             this.userService = userService;
+            this.mapper = mapper;
         }
         [HttpGet]
         public async Task<IActionResult> GetAll(){
             var posts = await postService.GetAll();
-            return Ok(posts.Select(post => new PostDto(post.Id,post.Tag!, post.Description, post.Creator!.Id)));
+            return Ok(posts.Select(post => mapper.Map<PostDto>(post)));
         }
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id){
             var post = await postService.Get(id);
-            return Ok(new PostDto(post.Id,post.Tag!, post.Description, post.Creator!.Id));
+            return Ok(mapper.Map<PostDto>(post));
         }
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]CreatePostDto postDto){
@@ -33,7 +36,9 @@ namespace MyApp.Namespace
             {
                 return NotFound();
             }
-            await postService.Create(new Post{Tag = postDto.Tag, Description = postDto.Description, CreationDate = DateTimeOffset.Now.ToUniversalTime(), Creator = user});            
+            var post = mapper.Map<Post>(postDto);
+            post.Creator = user;
+            await postService.Create(post);            
             return Ok();
         }
         [HttpPut("{id:int}")]

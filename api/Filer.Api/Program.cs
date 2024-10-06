@@ -1,3 +1,4 @@
+using Filer.Api.Mappers;
 using Filer.Application.Interfaces;
 using Filer.Application.Services;
 using Filer.DataAccess;
@@ -14,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetSection("ConnectionString").Value;
 builder.Services.AddNpgsql<PostContext>(connectionString);
+builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();

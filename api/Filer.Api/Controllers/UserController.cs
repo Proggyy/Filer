@@ -1,3 +1,4 @@
+using AutoMapper;
 using Filer.Api.DTOs;
 using Filer.Application.Interfaces;
 using Filer.Domain.Domain;
@@ -10,23 +11,25 @@ namespace MyApp.Namespace
     public class UserController : ControllerBase
     {
         private readonly IUserService userService;
-        public UserController(IUserService userService)
+        private readonly IMapper mapper;
+        public UserController(IUserService userService, IMapper mapper)
         {
             this.userService = userService;
+            this.mapper = mapper;
         }
         [HttpGet]
         public async Task<IActionResult> GetAll(){
             var users = await userService.GetAll();
-            return Ok(users.Select(user => new UserDto(user.Id,user.Login!, user.UserName!)));
+            return Ok(users.Select(user => mapper.Map<UserDto>(user)));
         }
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id){
             var user = await userService.Get(id);
-            return Ok(new UserDto(user.Id,user.Login!, user.UserName!));
+            return Ok(mapper.Map<UserDto>(user));
         }
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]CreateUserDto userDto){
-            await userService.Create(new User{Login = userDto.Login, UserName = userDto.UserName});            
+            await userService.Create(mapper.Map<User>(userDto));            
             return Ok();
         }
         [HttpPut("{id:int}")]
