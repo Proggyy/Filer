@@ -27,12 +27,15 @@ namespace MyApp.Namespace
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id){
             var post = await postService.Get(id);
+            if(post.Id == 0){
+                return NotFound();
+            }
             return Ok(mapper.Map<PostDto>(post));
         }
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]CreatePostDto postDto){
             var user = await userService.Get(postDto.UserId);
-            if(user == null)
+            if(user.Id == 0)
             {
                 return NotFound();
             }
@@ -44,11 +47,11 @@ namespace MyApp.Namespace
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id,[FromBody] CreatePostDto postDto){
             var post = await postService.Get(id);
-            if(post == null){
+            if(post.Id == 0){
                 return NotFound();              
             }
             var user = await userService.Get(postDto.UserId);
-            if(user == null){
+            if(user.Id == 0){
                 return NotFound();              
             }
             post.Tag = postDto.Tag;
@@ -59,6 +62,9 @@ namespace MyApp.Namespace
         }
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id){
+            if((await postService.Get(id)).Id == 0){
+                return NotFound();
+            }
             await postService.Delete(id);
             return Ok();
         }

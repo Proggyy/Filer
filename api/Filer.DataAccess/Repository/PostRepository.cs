@@ -30,6 +30,9 @@ public class PostRepository : IPostRepository{
 
     public async Task<Post> Get(int id)
     {
+        if(await postContext.PostEntities.FindAsync(id) == null){
+            return new Post();
+        }
         var post = await postContext.PostEntities.Include(p => p.UserEntity).AsNoTracking().FirstAsync(p => p.Id == id);
         if (post != null)
         {

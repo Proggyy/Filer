@@ -18,6 +18,10 @@ public class UserService : IUserService
 
     public async Task Delete(int id)
     {
+        var user = await userRepository.Get(id);
+        if(user.Id == 0){
+            return;
+        }
         await userRepository.Delete(id);
         await userRepository.Save();
     }
@@ -34,6 +38,10 @@ public class UserService : IUserService
 
     public async Task Update(User user)
     {
+        var existedUser = await userRepository.Get(user.Id);
+        if(existedUser.Id == 0){
+            return;
+        }
         await userRepository.Update(user);
         await userRepository.Save();
     }

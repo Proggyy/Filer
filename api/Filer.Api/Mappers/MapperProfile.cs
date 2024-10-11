@@ -12,8 +12,6 @@ public class MapperProfile : Profile{
         CreateMap<CreatePostDto,Post>()
             .ForMember(x => x.Id, y => y.Ignore())
             .ForMember(x => x.CreationDate, y => y.MapFrom(z => DateTimeOffset.Now.ToUniversalTime()));
-        CreateMap<PostEntity,Post>()
-            .ForMember(x => x.Creator, y => y.MapFrom(z => z.UserEntity!));
         CreateMap<User, UserDto>();
         CreateMap<CreateUserDto,User>();
     }

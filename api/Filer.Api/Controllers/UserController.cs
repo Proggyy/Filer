@@ -25,6 +25,9 @@ namespace MyApp.Namespace
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id){
             var user = await userService.Get(id);
+            if(user.Id == 0){
+                return NotFound();
+            }
             return Ok(mapper.Map<UserDto>(user));
         }
         [HttpPost]
@@ -35,17 +38,20 @@ namespace MyApp.Namespace
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id,[FromBody] CreateUserDto userDto){
             var user = await userService.Get(id);
-            if(user != null){
-                user.Login = userDto.Login; 
-                user.UserName = userDto.UserName; 
-
-                await userService.Update(user);
-                return Ok();
+            if(user.Id != 0){
+                return NotFound();
             }
-            return NotFound();
+            user.Login = userDto.Login; 
+            user.UserName = userDto.UserName; 
+
+            await userService.Update(user);
+            return Ok();                     
         }
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id){
+            if((await userService.Get(id)).Id == 0){
+                return NotFound();
+            }
             await userService.Delete(id);
             return Ok();
         }
