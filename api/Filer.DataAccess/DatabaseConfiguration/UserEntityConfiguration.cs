@@ -7,9 +7,8 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
 {
     public void Configure(EntityTypeBuilder<UserEntity> builder)
     {
-        builder.Property(e => e.Id).UseIdentityColumn();
         builder.HasData(new UserEntity{
-            Id = 1,
+            Id = Guid.NewGuid(),
             Login = "Test",
             UserName = "Test"
             }

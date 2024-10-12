@@ -8,24 +8,26 @@ namespace Filer.Application.Services;
 public class PostService : IPostService
 {
     private readonly IPostRepository postRepository;
-    public PostService(IPostRepository postRepository)
+    private readonly IUserRepository userRepository;
+    public PostService(IPostRepository postRepository, IUserRepository userRepository)
     {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
     }
     public async Task Create(Post post)
     {
-        var existedUser = await postRepository.Get(post.Creator!.Id);
-        if(existedUser.Id == 0){
+        var existedUser = await userRepository.Get(post.Creator!.Id);
+        if(existedUser.Id == Guid.Empty){
             throw new UserNotFoundException(post.Creator!.Id);
         }
         await postRepository.Create(post);
         await postRepository.Save();
     }
 
-    public async Task Delete(int id)
+    public async Task Delete(Guid id)
     {
         var post = await postRepository.Get(id);
-        if(post.Id == 0){
+        if(post.Id == Guid.Empty){
             throw new PostNotFoundException(id);
         }
         await postRepository.Delete(id);
@@ -37,10 +39,10 @@ public class PostService : IPostService
         return await postRepository.GetAll();
     }
 
-    public async Task<Post> Get(int id)
+    public async Task<Post> Get(Guid id)
     {
         var post = await postRepository.Get(id);
-        if(post.Id == 0)
+        if(post.Id == Guid.Empty)
         {
             throw new PostNotFoundException(id);
         }
@@ -50,11 +52,11 @@ public class PostService : IPostService
     public async Task Update(Post post)
     {
         var existedPost = await postRepository.Get(post.Id);
-        if(existedPost.Id == 0){
+        if(existedPost.Id == Guid.Empty){
             throw new PostNotFoundException(post.Id);
         }
-        var existedUser = await postRepository.Get(post.Creator!.Id);
-        if(existedUser.Id == 0){
+        var existedUser = await userRepository.Get(post.Creator!.Id);
+        if(existedUser.Id == Guid.Empty){
             throw new UserNotFoundException(post.Creator!.Id);
         }
         await postRepository.Update(post);

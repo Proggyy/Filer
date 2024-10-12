@@ -17,10 +17,10 @@ public class UserService : IUserService
         await userRepository.Save();
     }
 
-    public async Task Delete(int id)
+    public async Task Delete(Guid id)
     {
         var user = await userRepository.Get(id);
-        if(user.Id == 0){
+        if(user.Id == Guid.Empty){
             throw new UserNotFoundException(id);
         }
         await userRepository.Delete(id);
@@ -32,10 +32,10 @@ public class UserService : IUserService
         return await userRepository.GetAll();
     }
 
-    public async Task<User> Get(int id)
+    public async Task<User> Get(Guid id)
     {
         var user = await userRepository.Get(id);
-        if(user.Id == 0){
+        if(user.Id == Guid.Empty){
             throw new UserNotFoundException(id);
         }
         return user;
@@ -44,7 +44,7 @@ public class UserService : IUserService
     public async Task Update(User user)
     {
         var existedUser = await userRepository.Get(user.Id);
-        if(existedUser.Id == 0){
+        if(existedUser.Id == Guid.Empty){
             throw new UserNotFoundException(user.Id);
         }
         await userRepository.Update(user);

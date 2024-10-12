@@ -13,20 +13,20 @@ public class UserRepository : IUserRepository
     }
     public async Task Create(User entity)
     {
-        await postContext.UserEntities.AddAsync(new UserEntity{Login = entity.Login, UserName = entity.UserName});
+        await postContext.UserEntities.AddAsync(new UserEntity{Id = Guid.NewGuid(),Login = entity.Login, UserName = entity.UserName});
     }
 
-    public async Task Delete(int id)
+    public async Task Delete(Guid id)
     {
-        var entity = await postContext.UserEntities.FindAsync(id);
+        var entity = await postContext.UserEntities.FirstOrDefaultAsync(u => u.Id == id);
         if(entity != null){
             postContext.UserEntities.Remove(entity);
         }
     }
 
-    public async Task<User> Get(int id)
+    public async Task<User> Get(Guid id)
     {
-        var post = await postContext.UserEntities.FindAsync(id);
+        var post = await postContext.UserEntities.FirstOrDefaultAsync(u => u.Id == id);
         if (post != null)
         {
             return User.CreateUser(post.Id, post.UserName!, post.Login!);
@@ -50,7 +50,7 @@ public class UserRepository : IUserRepository
 
     public async Task Update(User entity)
     {
-        var user = await postContext.UserEntities.FindAsync(entity.Id);        
+        var user = await postContext.UserEntities.FirstOrDefaultAsync(u => u.Id == entity.Id);        
         if(user != null){
             user.Login = entity.Login;
             user.UserName = entity.UserName;

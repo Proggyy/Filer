@@ -7,15 +7,6 @@ public class PostEntityConfiguration : IEntityTypeConfiguration<PostEntity>
 {
     public void Configure(EntityTypeBuilder<PostEntity> builder)
     {
-        builder.Property(e => e.Id).UseIdentityColumn();
-        builder.HasData(new PostEntity{
-            Id = 1, 
-            Tag = "tag", 
-            CreationDate = DateTimeOffset.MinValue,
-            Description = "testDescription", 
-            ImagePath = "testPath",
-            UserId = 1
-            }
-        );
+        builder.HasOne(p => p.UserEntity).WithMany(u => u.PostEntities).OnDelete(DeleteBehavior.Cascade);
     }
 }

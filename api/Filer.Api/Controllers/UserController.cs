@@ -22,10 +22,10 @@ namespace MyApp.Namespace
             var users = await userService.GetAll();
             return Ok(users.Select(user => mapper.Map<UserDto>(user)));
         }
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> Get(int id){
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> Get(Guid id){
             var user = await userService.Get(id);
-            if(user.Id == 0){
+            if(user.Id == Guid.Empty){
                 return NotFound();
             }
             return Ok(mapper.Map<UserDto>(user));
@@ -35,10 +35,10 @@ namespace MyApp.Namespace
             await userService.Create(mapper.Map<User>(userDto));            
             return Ok();
         }
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update([FromRoute] int id,[FromBody] CreateUserDto userDto){
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> Update([FromRoute] Guid id,[FromBody] CreateUserDto userDto){
             var user = await userService.Get(id);
-            if(user.Id != 0){
+            if(user.Id == Guid.Empty){
                 return NotFound();
             }
             user.Login = userDto.Login; 
@@ -47,9 +47,9 @@ namespace MyApp.Namespace
             await userService.Update(user);
             return Ok();                     
         }
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete(int id){
-            if((await userService.Get(id)).Id == 0){
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> Delete(Guid id){
+            if((await userService.Get(id)).Id == Guid.Empty){
                 return NotFound();
             }
             await userService.Delete(id);

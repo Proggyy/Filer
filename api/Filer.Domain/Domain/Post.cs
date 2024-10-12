@@ -5,7 +5,7 @@ namespace Filer.Domain.Domain;
 
 public class Post{
     [Key]
-    public int Id { get; set;}
+    public Guid Id { get; set;}
     [Required(ErrorMessage = "Tag is a required field.")]
     [StringLength(100, MinimumLength = 3, ErrorMessage = "Tag can contain from 3 to 100 characters")]
     public string? Tag { get; set;}
@@ -18,11 +18,11 @@ public class Post{
     [Required]
     public User? Creator { get; set; }
 
-    public static Post CreatePost(int id, string tag, string imagePath, string description, DateTimeOffset createdate, User creator) 
+    public static Post CreatePost(Guid id, string tag, string imagePath, string description, DateTimeOffset createdate, User creator) 
     {
         return new Post{Id = id, Tag = tag, Description = description, CreationDate = createdate, ImagePath = imagePath, Creator = creator};
     }   
-    public static Post CreatePostWithoutImage(int id, string tag, string description, DateTimeOffset createdate, User creator) 
+    public static Post CreatePostWithoutImage(Guid id, string tag, string description, DateTimeOffset createdate, User creator) 
     {
         return new Post{Id = id, Tag = tag, Description = description, CreationDate = createdate, Creator = creator};
     }  

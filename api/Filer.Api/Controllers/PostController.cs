@@ -24,10 +24,10 @@ namespace MyApp.Namespace
             var posts = await postService.GetAll();
             return Ok(posts.Select(post => mapper.Map<PostDto>(post)));
         }
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> Get(int id){
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> Get(Guid id){
             var post = await postService.Get(id);
-            if(post.Id == 0){
+            if(post.Id == Guid.Empty){
                 return NotFound();
             }
             return Ok(mapper.Map<PostDto>(post));
@@ -35,7 +35,7 @@ namespace MyApp.Namespace
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]CreatePostDto postDto){
             var user = await userService.Get(postDto.UserId);
-            if(user.Id == 0)
+            if(user.Id == Guid.Empty)
             {
                 return NotFound();
             }
@@ -44,14 +44,14 @@ namespace MyApp.Namespace
             await postService.Create(post);            
             return Ok();
         }
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update([FromRoute] int id,[FromBody] CreatePostDto postDto){
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> Update([FromRoute] Guid id,[FromBody] CreatePostDto postDto){
             var post = await postService.Get(id);
-            if(post.Id == 0){
+            if(post.Id == Guid.Empty){
                 return NotFound();              
             }
             var user = await userService.Get(postDto.UserId);
-            if(user.Id == 0){
+            if(user.Id == Guid.Empty){
                 return NotFound();              
             }
             post.Tag = postDto.Tag;
@@ -60,9 +60,9 @@ namespace MyApp.Namespace
             await postService.Update(post);
             return Ok();
         }
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete(int id){
-            if((await postService.Get(id)).Id == 0){
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> Delete(Guid id){
+            if((await postService.Get(id)).Id == Guid.Empty){
                 return NotFound();
             }
             await postService.Delete(id);
