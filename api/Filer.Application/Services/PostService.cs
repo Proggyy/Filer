@@ -1,3 +1,4 @@
+using Filer.Application.Exceptions;
 using Filer.Application.Interfaces;
 using Filer.DataAccess;
 using Filer.DataAccess.Interfaces;
@@ -15,7 +16,7 @@ public class PostService : IPostService
     {
         var existedUser = await postRepository.Get(post.Creator!.Id);
         if(existedUser.Id == 0){
-            return;
+            throw new UserNotFoundException(post.Creator!.Id);
         }
         await postRepository.Create(post);
         await postRepository.Save();
@@ -25,7 +26,7 @@ public class PostService : IPostService
     {
         var post = await postRepository.Get(id);
         if(post.Id == 0){
-            return;
+            throw new PostNotFoundException(id);
         }
         await postRepository.Delete(id);
         await postRepository.Save();
@@ -38,18 +39,23 @@ public class PostService : IPostService
 
     public async Task<Post> Get(int id)
     {
-        return await postRepository.Get(id);
+        var post = await postRepository.Get(id);
+        if(post.Id == 0)
+        {
+            throw new PostNotFoundException(id);
+        }
+        return post;
     }
 
     public async Task Update(Post post)
     {
         var existedPost = await postRepository.Get(post.Id);
         if(existedPost.Id == 0){
-            return;
+            throw new PostNotFoundException(post.Id);
         }
         var existedUser = await postRepository.Get(post.Creator!.Id);
         if(existedUser.Id == 0){
-            return;
+            throw new UserNotFoundException(post.Creator!.Id);
         }
         await postRepository.Update(post);
         await postRepository.Save();

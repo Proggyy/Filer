@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json;
+using Filer.Application.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 
 namespace Filer.Api.Configurations;
@@ -14,9 +15,17 @@ public static class ExceptionConfiguration{
 
                 if(feature != null)
                 {
+                    switch(feature.Error){
+                        case NotFoundException: 
+                            context.Response.StatusCode = StatusCodes.Status404NotFound; 
+                        break;
+                        default: 
+                            context.Response.StatusCode = StatusCodes.Status500InternalServerError; 
+                        break;
+                    }
                     app.Logger.LogError($"Error: {feature.Error}");
                     await context.Response.WriteAsync(new Error{
-                        Message = "Server error",
+                        Message = feature.Error.Message,
                         StatusCode = context.Response.StatusCode
                     }.ToString());
                 }

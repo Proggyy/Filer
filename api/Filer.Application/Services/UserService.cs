@@ -1,3 +1,4 @@
+using Filer.Application.Exceptions;
 using Filer.Application.Interfaces;
 using Filer.DataAccess.Interfaces;
 using Filer.Domain.Domain;
@@ -20,7 +21,7 @@ public class UserService : IUserService
     {
         var user = await userRepository.Get(id);
         if(user.Id == 0){
-            return;
+            throw new UserNotFoundException(id);
         }
         await userRepository.Delete(id);
         await userRepository.Save();
@@ -33,14 +34,18 @@ public class UserService : IUserService
 
     public async Task<User> Get(int id)
     {
-        return await userRepository.Get(id);
+        var user = await userRepository.Get(id);
+        if(user.Id == 0){
+            throw new UserNotFoundException(id);
+        }
+        return user;
     }
 
     public async Task Update(User user)
     {
         var existedUser = await userRepository.Get(user.Id);
         if(existedUser.Id == 0){
-            return;
+            throw new UserNotFoundException(user.Id);
         }
         await userRepository.Update(user);
         await userRepository.Save();
