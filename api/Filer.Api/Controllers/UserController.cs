@@ -32,11 +32,17 @@ namespace MyApp.Namespace
         }
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]CreateUserDto userDto){
+            if(!ModelState.IsValid){
+                return UnprocessableEntity(ModelState);
+            }
             await userService.Create(mapper.Map<User>(userDto));            
             return Ok();
         }
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update([FromRoute] Guid id,[FromBody] CreateUserDto userDto){
+            if(!ModelState.IsValid){
+                return UnprocessableEntity(ModelState);
+            }
             var user = await userService.Get(id);
             if(user.Id == Guid.Empty){
                 return NotFound();

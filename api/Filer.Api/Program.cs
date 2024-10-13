@@ -5,6 +5,7 @@ using Filer.Application.Services;
 using Filer.DataAccess;
 using Filer.DataAccess.Interfaces;
 using Filer.DataAccess.Repository;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigurePostgresqlDatabase(builder.Configuration);
+builder.Services.ConfigureApiOptions();
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IPostService, PostService>();

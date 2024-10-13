@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using Filer.Api.DTOs;
 using Filer.Application.Interfaces;
@@ -34,6 +35,10 @@ namespace MyApp.Namespace
         }
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]CreatePostDto postDto){
+            if(!ModelState.IsValid){
+                return UnprocessableEntity(ModelState);
+            }
+            
             var user = await userService.Get(postDto.UserId);
             if(user.Id == Guid.Empty)
             {
@@ -46,6 +51,9 @@ namespace MyApp.Namespace
         }
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update([FromRoute] Guid id,[FromBody] CreatePostDto postDto){
+            if(!ModelState.IsValid){
+                return UnprocessableEntity(ModelState);
+            }
             var post = await postService.Get(id);
             if(post.Id == Guid.Empty){
                 return NotFound();              
