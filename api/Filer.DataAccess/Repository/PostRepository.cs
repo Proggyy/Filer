@@ -1,5 +1,7 @@
+using Filer.DataAccess.Extensions;
 using Filer.DataAccess.Interfaces;
 using Filer.Domain.Domain;
+using Filer.Domain.Parameters;
 using Microsoft.EntityFrameworkCore;
 
 namespace Filer.DataAccess.Repository;
@@ -46,13 +48,14 @@ public class PostRepository : IPostRepository{
         }
     }
 
-    public async Task<IEnumerable<Post>> GetAll()
+    public async Task<IEnumerable<Post>> GetAll(PostParameters postParameters)
     {
-        return await postContext.PostEntities.Include(p => p.UserEntity).AsNoTracking()
+        var list = await postContext.PostEntities.Include(p => p.UserEntity).AsNoTracking()
         .Select(post => post.HasImage ? 
         Post.CreatePost(post.Id, post.Tag!, post.ImagePath, post.Description, post.CreationDate, User.CreateUser(post.UserEntity!.Id, post.UserEntity.UserName!, post.UserEntity.Login!)) 
             : Post.CreatePostWithoutImage(post.Id, post.Tag!, post.Description, post.CreationDate, User.CreateUser(post.UserEntity!.Id, post.UserEntity.UserName!, post.UserEntity.Login!)))
-        .ToListAsync();
+            .ToListAsync();
+        return list.Sort(postParameters.OrderBy!);
     }
 
     public async Task Update(Post entity)

@@ -3,6 +3,7 @@ using Filer.Application.Interfaces;
 using Filer.DataAccess;
 using Filer.DataAccess.Interfaces;
 using Filer.Domain.Domain;
+using Filer.Domain.Parameters;
 namespace Filer.Application.Services;
 
 public class PostService : IPostService
@@ -34,9 +35,9 @@ public class PostService : IPostService
         await postRepository.Save();
     }
 
-    public async Task<IEnumerable<Post>> GetAll()
+    public async Task<IEnumerable<Post>> GetAll(PostParameters postParameters)
     {
-        return await postRepository.GetAll();
+        return await postRepository.GetAll(postParameters);
     }
 
     public async Task<Post> Get(Guid id)

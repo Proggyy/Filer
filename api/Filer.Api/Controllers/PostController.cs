@@ -3,6 +3,7 @@ using AutoMapper;
 using Filer.Api.DTOs;
 using Filer.Application.Interfaces;
 using Filer.Domain.Domain;
+using Filer.Domain.Parameters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MyApp.Namespace
@@ -21,8 +22,8 @@ namespace MyApp.Namespace
             this.mapper = mapper;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAll(){
-            var posts = await postService.GetAll();
+        public async Task<IActionResult> GetAll([FromQuery] PostParameters postParameters){
+            var posts = await postService.GetAll(postParameters);
             return Ok(posts.Select(post => mapper.Map<PostDto>(post)));
         }
         [HttpGet("{id:guid}")]

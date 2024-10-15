@@ -2,6 +2,7 @@ using Filer.Application.Exceptions;
 using Filer.Application.Interfaces;
 using Filer.DataAccess.Interfaces;
 using Filer.Domain.Domain;
+using Filer.Domain.Parameters;
 namespace Filer.Application.Services;
 
 public class UserService : IUserService
@@ -27,9 +28,9 @@ public class UserService : IUserService
         await userRepository.Save();
     }
 
-    public async Task<IEnumerable<User>> GetAll()
+    public async Task<IEnumerable<User>> GetAll(UserParameters userParameters)
     {
-        return await userRepository.GetAll();
+        return await userRepository.GetAll(userParameters);
     }
 
     public async Task<User> Get(Guid id)

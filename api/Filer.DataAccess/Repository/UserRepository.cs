@@ -1,6 +1,8 @@
 using Filer.DataAccess.Interfaces;
 using Filer.Domain.Domain;
+using Filer.Domain.Parameters;
 using Microsoft.EntityFrameworkCore;
+using Filer.DataAccess.Extensions;
 
 namespace Filer.DataAccess.Repository;
 
@@ -36,11 +38,12 @@ public class UserRepository : IUserRepository
         }
     }
 
-    public async Task<IEnumerable<User>> GetAll()
+    public async Task<IEnumerable<User>> GetAll(UserParameters userParameters)
     {
-        return await postContext.UserEntities.AsNoTracking()
+        var list = await postContext.UserEntities.AsNoTracking()
         .Select(user => User.CreateUser(user.Id, user.UserName!, user.Login!))
         .ToListAsync();
+        return list.Sort(userParameters.OrderBy!);
     }
 
     public async Task Save()
