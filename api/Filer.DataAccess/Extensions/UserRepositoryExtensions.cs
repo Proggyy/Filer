@@ -11,6 +11,13 @@ public static class UserRepositoryExtensions{
         }       
         return Sortings<User>.OrderByProp(users,query, Orders.Ascending);
     }
-
+    public static IQueryable<UserEntity> Search(this IQueryable<UserEntity> users, string searchTerm){
+        if(string.IsNullOrWhiteSpace(searchTerm) || string.IsNullOrEmpty(searchTerm))
+        {
+            return users;
+        }
+        var optimizeTerm = searchTerm.Trim().ToLower();
+        return users.Where(x => x.UserName!.ToLower().Contains(optimizeTerm));
+    }
 
 }

@@ -11,6 +11,15 @@ public static class PostRepositoryExtensions{
         }       
         return Sortings<Post>.OrderByProp(posts,query, Orders.Ascending);
     }
-
-
+    public static IQueryable<PostEntity> Search(this IQueryable<PostEntity> posts, string searchTerm, bool withDescription){
+        if(string.IsNullOrWhiteSpace(searchTerm) || string.IsNullOrEmpty(searchTerm))
+        {
+            return posts;
+        }
+        var optimizeTerm = searchTerm.Trim().ToLower();
+        if(withDescription){
+            return posts.Where(x => x.Tag!.ToLower().Contains(optimizeTerm) || x.Description!.ToLower().Contains(optimizeTerm));
+        }
+        return posts.Where(x => x.Tag!.ToLower().Contains(optimizeTerm));
+    }
 }

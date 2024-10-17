@@ -41,7 +41,8 @@ public class UserRepository : IUserRepository
     public async Task<IEnumerable<User>> GetAll(UserParameters userParameters)
     {
         var list = await postContext.UserEntities.AsNoTracking()
-        .Select(user => User.CreateUser(user.Id, user.UserName!, user.Login!))
+        .Search(userParameters.SearchTerm)
+        .Select(user => User.CreateUser(user.Id, user.UserName!, user.Login!))      
         .ToListAsync();
         return list.Sort(userParameters.OrderBy!);
     }
