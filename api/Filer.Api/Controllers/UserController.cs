@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AutoMapper;
 using Filer.Api.DTOs;
 using Filer.Application.Interfaces;
@@ -21,6 +22,7 @@ namespace MyApp.Namespace
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] UserParameters userParameters){
             var users = await userService.GetAll(userParameters);
+            Response.Headers.Append("Pagination-Data", JsonSerializer.Serialize(users.pagedata));
             return Ok(users.Select(user => mapper.Map<UserDto>(user)));
         }
         [HttpGet("{id:guid}")]

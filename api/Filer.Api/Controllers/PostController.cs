@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using AutoMapper;
 using Filer.Api.DTOs;
 using Filer.Application.Interfaces;
@@ -24,6 +25,7 @@ namespace MyApp.Namespace
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] PostParameters postParameters){
             var posts = await postService.GetAll(postParameters);
+            Response.Headers.Append("Pagination-Data", JsonSerializer.Serialize(posts.pagedata));
             return Ok(posts.Select(post => mapper.Map<PostDto>(post)));
         }
         [HttpGet("{id:guid}")]

@@ -5,6 +5,7 @@ public static class CorsConfiguration{
         services.AddCors(options => {
             options.AddPolicy("AllowAll", builder => 
                 builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
+                .WithExposedHeaders("Pagination-Data")
             );
         });
     }

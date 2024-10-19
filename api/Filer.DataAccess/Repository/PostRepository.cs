@@ -2,6 +2,7 @@ using Filer.DataAccess.Extensions;
 using Filer.DataAccess.Interfaces;
 using Filer.Domain.Domain;
 using Filer.Domain.Parameters;
+using Filer.Domain.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace Filer.DataAccess.Repository;
@@ -48,7 +49,7 @@ public class PostRepository : IPostRepository{
         }
     }
 
-    public async Task<IEnumerable<Post>> GetAll(PostParameters postParameters)
+    public async Task<PagedList<Post>> GetAll(PostParameters postParameters)
     {
         var list = await postContext.PostEntities.Include(p => p.UserEntity).AsNoTracking()
         .Search(postParameters.SearchTerm, false)
@@ -56,7 +57,8 @@ public class PostRepository : IPostRepository{
         Post.CreatePost(post.Id, post.Tag!, post.ImagePath, post.Description, post.CreationDate, User.CreateUser(post.UserEntity!.Id, post.UserEntity.UserName!, post.UserEntity.Login!)) 
             : Post.CreatePostWithoutImage(post.Id, post.Tag!, post.Description, post.CreationDate, User.CreateUser(post.UserEntity!.Id, post.UserEntity.UserName!, post.UserEntity.Login!)))        
         .ToListAsync();
-        return list.Sort(postParameters.OrderBy!);
+        var sortedList = list.Sort(postParameters.OrderBy!);
+        return PagedList<Post>.CreatePagedList(sortedList, postParameters.PageNumber, postParameters.PageSize);
     }
 
     public async Task Update(Post entity)

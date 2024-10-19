@@ -3,6 +3,7 @@ using Filer.Domain.Domain;
 using Filer.Domain.Parameters;
 using Microsoft.EntityFrameworkCore;
 using Filer.DataAccess.Extensions;
+using Filer.Domain.Shared;
 
 namespace Filer.DataAccess.Repository;
 
@@ -38,13 +39,14 @@ public class UserRepository : IUserRepository
         }
     }
 
-    public async Task<IEnumerable<User>> GetAll(UserParameters userParameters)
+    public async Task<PagedList<User>> GetAll(UserParameters userParameters)
     {
         var list = await postContext.UserEntities.AsNoTracking()
         .Search(userParameters.SearchTerm)
         .Select(user => User.CreateUser(user.Id, user.UserName!, user.Login!))      
         .ToListAsync();
-        return list.Sort(userParameters.OrderBy!);
+        var sortedList = list.Sort(userParameters.OrderBy!);
+        return PagedList<User>.CreatePagedList(sortedList, userParameters.PageNumber, userParameters.PageSize);
     }
 
     public async Task Save()

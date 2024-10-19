@@ -1,8 +1,9 @@
 using Filer.Domain.Domain;
 using Filer.Domain.Parameters;
+using Filer.Domain.Shared;
 
 namespace Filer.DataAccess.Interfaces;
 
 public interface IUserRepository : IRepository<User>{
-    Task<IEnumerable<User>> GetAll(UserParameters userParameters);
+    Task<PagedList<User>> GetAll(UserParameters userParameters);
 }

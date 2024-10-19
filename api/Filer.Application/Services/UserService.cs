@@ -3,6 +3,7 @@ using Filer.Application.Interfaces;
 using Filer.DataAccess.Interfaces;
 using Filer.Domain.Domain;
 using Filer.Domain.Parameters;
+using Filer.Domain.Shared;
 namespace Filer.Application.Services;
 
 public class UserService : IUserService
@@ -28,7 +29,7 @@ public class UserService : IUserService
         await userRepository.Save();
     }
 
-    public async Task<IEnumerable<User>> GetAll(UserParameters userParameters)
+    public async Task<PagedList<User>> GetAll(UserParameters userParameters)
     {
         return await userRepository.GetAll(userParameters);
     }
