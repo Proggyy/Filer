@@ -23,7 +23,7 @@ namespace MyApp.Namespace
         public async Task<IActionResult> GetAll([FromQuery] UserParameters userParameters){
             var users = await userService.GetAll(userParameters);
             Response.Headers.Append("Pagination-Data", JsonSerializer.Serialize(users.pagedata));
-            return Ok(users.Select(user => mapper.Map<UserDto>(user)));
+            return Ok(mapper.Map<IEnumerable<UserDto>>(users));
         }
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> Get(Guid id){

@@ -26,7 +26,7 @@ namespace MyApp.Namespace
         public async Task<IActionResult> GetAll([FromQuery] PostParameters postParameters){
             var posts = await postService.GetAll(postParameters);
             Response.Headers.Append("Pagination-Data", JsonSerializer.Serialize(posts.pagedata));
-            return Ok(posts.Select(post => mapper.Map<PostDto>(post)));
+            return Ok(mapper.Map<IEnumerable<PostDto>>(posts));
         }
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> Get(Guid id){
