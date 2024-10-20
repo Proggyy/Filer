@@ -24,6 +24,7 @@ namespace MyApp.Namespace
             this.mapper = mapper;
         }
         [HttpGet]
+        [ResponseCache(CacheProfileName = "MinuteDuration")]
         public async Task<IActionResult> GetAll([FromQuery] PostParameters postParameters){
             var posts = await postService.GetAll(postParameters);
             Response.Headers.Append("Pagination-Data", JsonSerializer.Serialize(posts.pagedata));

@@ -2,15 +2,14 @@ using Filer.Api.Configurations;
 using Filer.Api.Mappers;
 using Filer.Application.Interfaces;
 using Filer.Application.Services;
-using Filer.DataAccess;
 using Filer.DataAccess.Interfaces;
 using Filer.DataAccess.Repository;
-using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.ConfigureCors();
-builder.Services.AddControllers();
+builder.Services.AddResponseCaching();
+builder.Services.ConfigureControllersOptions();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigurePostgresqlDatabase(builder.Configuration);
@@ -37,6 +36,7 @@ else{
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.AddCorsToApplication(builder.Configuration);
+app.UseResponseCaching();
 app.UseAuthorization();
 
 app.MapControllers();
