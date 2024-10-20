@@ -1,6 +1,7 @@
 using System.Text.Json;
 using AutoMapper;
 using Filer.Api.DTOs;
+using Filer.Api.Filters;
 using Filer.Application.Interfaces;
 using Filer.Domain.Domain;
 using Filer.Domain.Parameters;
@@ -34,18 +35,14 @@ namespace MyApp.Namespace
             return Ok(mapper.Map<UserDto>(user));
         }
         [HttpPost]
+        [ValidationFilter]
         public async Task<IActionResult> Create([FromBody]CreateUserDto userDto){
-            if(!ModelState.IsValid){
-                return UnprocessableEntity(ModelState);
-            }
             await userService.Create(mapper.Map<User>(userDto));            
             return Ok();
         }
         [HttpPut("{id:guid}")]
+        [ValidationFilter]
         public async Task<IActionResult> Update([FromRoute] Guid id,[FromBody] CreateUserDto userDto){
-            if(!ModelState.IsValid){
-                return UnprocessableEntity(ModelState);
-            }
             var user = await userService.Get(id);
             if(user.Id == Guid.Empty){
                 return NotFound();
