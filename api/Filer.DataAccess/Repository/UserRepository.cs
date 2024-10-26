@@ -16,7 +16,7 @@ public class UserRepository : IUserRepository
     }
     public async Task Create(User entity)
     {
-        await postContext.UserEntities.AddAsync(new UserEntity{Id = Guid.NewGuid(),Login = entity.Login, UserName = entity.UserName});
+        await postContext.UserEntities.AddAsync(new UserEntity{Id = Guid.NewGuid(),Login = entity.Login, UserName = entity.UserName, PasswordHash = entity.PasswordHash});
     }
 
     public async Task Delete(Guid id)
@@ -47,6 +47,18 @@ public class UserRepository : IUserRepository
         .ToListAsync();
         var sortedList = list.Sort(userParameters.OrderBy!);
         return PagedList<User>.CreatePagedList(sortedList, userParameters.PageNumber, userParameters.PageSize);
+    }
+
+    public async Task<User> GetByLogin(string login)
+    {
+        var post = await postContext.UserEntities.FirstOrDefaultAsync(u => u.Login == login);
+        if (post != null)
+        {
+            return User.CreateNewUser(post.Id, post.UserName!, post.Login!, post.PasswordHash!);
+        }
+        else{
+            return new User();
+        }
     }
 
     public async Task Save()

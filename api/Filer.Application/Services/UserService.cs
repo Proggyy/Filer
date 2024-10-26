@@ -1,6 +1,8 @@
 using Filer.Application.Exceptions;
 using Filer.Application.Interfaces;
+using Filer.Application.Interfaces.Auth;
 using Filer.DataAccess.Interfaces;
+using Filer.DataAccess.Repository;
 using Filer.Domain.Domain;
 using Filer.Domain.Parameters;
 using Filer.Domain.Shared;
@@ -9,9 +11,13 @@ namespace Filer.Application.Services;
 public class UserService : IUserService
 {
     private readonly IUserRepository userRepository;
-    public UserService(IUserRepository userRepository)
+    private readonly IPasswordHasher passwordHasher;
+    private readonly IJwtProvider jwtProvider;
+    public UserService(IUserRepository userRepository, IPasswordHasher passwordHasher, IJwtProvider jwtProvider)
     {
         this.userRepository = userRepository;
+        this.passwordHasher = passwordHasher;
+        this.jwtProvider = jwtProvider;
     }
     public async Task Create(User user)
     {
@@ -51,5 +57,28 @@ public class UserService : IUserService
         }
         await userRepository.Update(user);
         await userRepository.Save();
+    }
+
+    public async Task RegisterNewUser(string login, string name, string password)
+    {
+        var registred = await userRepository.GetByLogin(login);
+        if(registred.Id == Guid.Empty)
+        {
+            var passwordHash = passwordHasher.Hash(password);
+            var user = User.CreateNewUser(Guid.NewGuid() ,name, login, passwordHash);
+            await userRepository.Create(user);
+            await userRepository.Save();
+        }
+    }
+
+    public async Task<string> LoginUser(string login, string password)
+    {
+        var registred = await userRepository.GetByLogin(login);
+        var hash = passwordHasher.Hash(password);
+        if(registred.Id != Guid.Empty && registred.PasswordHash == hash)
+        {
+            return jwtProvider.GenerateToken(registred);
+        }
+        return "";
     }
 }

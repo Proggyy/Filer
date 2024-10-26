@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Filer.DataAccess\Filer.DataAccess.csproj" />
     <ProjectReference Include="..\Filer.Application\Filer.Application.csproj" />
+    <ProjectReference Include="..\Filer.Infrastructure\Filer.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

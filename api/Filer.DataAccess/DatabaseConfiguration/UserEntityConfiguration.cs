@@ -10,7 +10,8 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
         builder.HasData(new UserEntity{
             Id = Guid.NewGuid(),
             Login = "Test",
-            UserName = "Test"
+            UserName = "Test",
+            PasswordHash = "11111"
             }
         );
     }

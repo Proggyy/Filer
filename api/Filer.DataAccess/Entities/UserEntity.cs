@@ -11,5 +11,7 @@ public class UserEntity{
     [Required(ErrorMessage = "Login is a required field.")]
     [StringLength(50, MinimumLength = 3, ErrorMessage = "Login can contain from 3 to 50 characters")]
     public string? Login { get; set;}
+    [Required]
+    public string? PasswordHash { get; set;}
     public List<PostEntity>? PostEntities { get; set; }
 }

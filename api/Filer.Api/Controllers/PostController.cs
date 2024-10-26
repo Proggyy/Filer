@@ -6,6 +6,7 @@ using Filer.Api.Filters;
 using Filer.Application.Interfaces;
 using Filer.Domain.Domain;
 using Filer.Domain.Parameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MyApp.Namespace
@@ -25,6 +26,7 @@ namespace MyApp.Namespace
         }
         [HttpGet]
         [ResponseCache(CacheProfileName = "MinuteDuration")]
+        [Authorize]
         public async Task<IActionResult> GetAll([FromQuery] PostParameters postParameters){
             var posts = await postService.GetAll(postParameters);
             Response.Headers.Append("Pagination-Data", JsonSerializer.Serialize(posts.pagedata));
