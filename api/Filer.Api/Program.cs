@@ -7,13 +7,15 @@ using Filer.DataAccess.Interfaces;
 using Filer.DataAccess.Repository;
 using Filer.Infrastructure.Hashers;
 using Filer.Infrastructure.JWT;
+using Filer.Infrastructure.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.ConfigureCors();
-builder.Services.AddJwtAuthorization();
+builder.Services.AddJwtAuthorization(builder.Configuration);
 builder.Services.AddResponseCaching();
 builder.Services.ConfigureControllersOptions();
+builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection(nameof(AuthOptions)));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigurePostgresqlDatabase(builder.Configuration);

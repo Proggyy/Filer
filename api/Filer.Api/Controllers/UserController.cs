@@ -5,6 +5,7 @@ using Filer.Api.Filters;
 using Filer.Application.Interfaces;
 using Filer.Domain.Domain;
 using Filer.Domain.Parameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MyApp.Namespace
@@ -22,12 +23,14 @@ namespace MyApp.Namespace
         }
         [HttpGet]
         [ResponseCache(CacheProfileName = "MinuteDuration")]
+        [Authorize]
         public async Task<IActionResult> GetAll([FromQuery] UserParameters userParameters){
             var users = await userService.GetAll(userParameters);
             Response.Headers.Append("Pagination-Data", JsonSerializer.Serialize(users.pagedata));
             return Ok(mapper.Map<IEnumerable<UserDto>>(users));
         }
         [HttpGet("{id:guid}")]
+        [Authorize]
         public async Task<IActionResult> Get(Guid id){
             var user = await userService.Get(id);
             if(user.Id == Guid.Empty){
@@ -35,14 +38,9 @@ namespace MyApp.Namespace
             }
             return Ok(mapper.Map<UserDto>(user));
         }
-        [HttpPost]
-        [ValidationFilter]
-        public async Task<IActionResult> Create([FromBody]CreateUserDto userDto){
-            await userService.Create(mapper.Map<User>(userDto));            
-            return Ok();
-        }
         [HttpPut("{id:guid}")]
         [ValidationFilter]
+        [Authorize]
         public async Task<IActionResult> Update([FromRoute] Guid id,[FromBody] CreateUserDto userDto){
             var user = await userService.Get(id);
             if(user.Id == Guid.Empty){
@@ -55,6 +53,7 @@ namespace MyApp.Namespace
             return Ok();                     
         }
         [HttpDelete("{id:guid}")]
+        [Authorize]
         public async Task<IActionResult> Delete(Guid id){
             if((await userService.Get(id)).Id == Guid.Empty){
                 return NotFound();

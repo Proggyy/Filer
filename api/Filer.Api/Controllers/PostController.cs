@@ -33,6 +33,7 @@ namespace MyApp.Namespace
             return Ok(mapper.Map<IEnumerable<PostDto>>(posts));
         }
         [HttpGet("{id:guid}")]
+        [Authorize]
         public async Task<IActionResult> Get(Guid id){
             var post = await postService.Get(id);
             if(post.Id == Guid.Empty){
@@ -42,6 +43,7 @@ namespace MyApp.Namespace
         }
         [HttpPost]
         [ValidationFilter]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody]CreatePostDto postDto){
             var user = await userService.Get(postDto.UserId);
             if(user.Id == Guid.Empty)
@@ -55,6 +57,7 @@ namespace MyApp.Namespace
         }
         [HttpPut("{id:guid}")]
         [ValidationFilter]
+        [Authorize]
         public async Task<IActionResult> Update([FromRoute] Guid id,[FromBody] CreatePostDto postDto){
             var post = await postService.Get(id);
             if(post.Id == Guid.Empty){
@@ -71,6 +74,7 @@ namespace MyApp.Namespace
             return Ok();
         }
         [HttpDelete("{id:guid}")]
+        [Authorize]
         public async Task<IActionResult> Delete(Guid id){
             if((await postService.Get(id)).Id == Guid.Empty){
                 return NotFound();

@@ -18,8 +18,7 @@ namespace MyApp.Namespace
         [ValidationFilter]
         public async Task<IActionResult> Register(RegisterUserDto registerUserDto){
             await userService.RegisterNewUser(registerUserDto.Login,registerUserDto.UserName,registerUserDto.Password);
-            var users = await userService.GetAll(new UserParameters());
-            return Ok(users);
+            return Ok();
         }
         [HttpPost("login")]
         [ValidationFilter]
