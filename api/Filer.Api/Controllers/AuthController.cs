@@ -17,8 +17,8 @@ namespace MyApp.Namespace
         [HttpPost("register")]
         [ValidationFilter]
         public async Task<IActionResult> Register(RegisterUserDto registerUserDto){
-            await userService.RegisterNewUser(registerUserDto.Login,registerUserDto.UserName,registerUserDto.Password);
-            return Ok();
+            bool isSucces = await userService.RegisterNewUser(registerUserDto.Login,registerUserDto.UserName,registerUserDto.Password);
+            return Ok(isSucces);
         }
         [HttpPost("login")]
         [ValidationFilter]
@@ -27,7 +27,6 @@ namespace MyApp.Namespace
             if(token == ""){
                 return NotFound();
             }
-            Response.Cookies.Append("AuthToken", token);
             return Ok(token);
         }
     }

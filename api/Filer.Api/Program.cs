@@ -17,7 +17,7 @@ builder.Services.AddResponseCaching();
 builder.Services.ConfigureControllersOptions();
 builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection(nameof(AuthOptions)));
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.ConfigureSwagger();
 builder.Services.ConfigurePostgresqlDatabase(builder.Configuration);
 builder.Services.ConfigureApiOptions();
 builder.Services.AddAutoMapper(typeof(MapperProfile));

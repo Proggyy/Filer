@@ -59,17 +59,18 @@ public class UserService : IUserService
         await userRepository.Save();
     }
 
-    public async Task RegisterNewUser(string login, string name, string password)
+    public async Task<bool> RegisterNewUser(string login, string name, string password)
     {
         var registred = await userRepository.GetByLogin(login);
         if(registred.Id != Guid.Empty)
         {
-            throw new LoginExistException(login);
+            return false;
         }
         var passwordHash = passwordHasher.Hash(password);
         var user = User.CreateNewUser(Guid.NewGuid() ,name, login, passwordHash);
         await userRepository.Create(user);
-        await userRepository.Save();        
+        await userRepository.Save(); 
+        return true;       
     }
 
     public async Task<string> LoginUser(string login, string password)
