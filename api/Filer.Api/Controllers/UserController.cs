@@ -42,6 +42,10 @@ namespace MyApp.Namespace
         [ValidationFilter]
         [Authorize]
         public async Task<IActionResult> Update([FromRoute] Guid id,[FromBody] CreateUserDto userDto){
+            var UserId = User.Claims.FirstOrDefault(claim => claim.Type == "Id");
+            if(id.ToString() != UserId.Value){
+                return Forbid();
+            }
             var user = await userService.Get(id);
             if(user.Id == Guid.Empty){
                 return NotFound();
@@ -55,6 +59,10 @@ namespace MyApp.Namespace
         [HttpDelete("{id:guid}")]
         [Authorize]
         public async Task<IActionResult> Delete(Guid id){
+            var UserId = User.Claims.FirstOrDefault(claim => claim.Type == "Id");
+            if(id.ToString() != UserId.Value){
+                return Forbid();
+            }
             if((await userService.Get(id)).Id == Guid.Empty){
                 return NotFound();
             }

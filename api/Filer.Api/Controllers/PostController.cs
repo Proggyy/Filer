@@ -45,6 +45,10 @@ namespace MyApp.Namespace
         [ValidationFilter]
         [Authorize]
         public async Task<IActionResult> Create([FromBody]CreatePostDto postDto){
+            var UserId = User.Claims.FirstOrDefault(claim => claim.Type == "Id");
+            if(postDto.UserId.ToString() != UserId.Value){
+                return Forbid();
+            }
             var user = await userService.Get(postDto.UserId);
             if(user.Id == Guid.Empty)
             {
@@ -58,10 +62,14 @@ namespace MyApp.Namespace
         [HttpPut("{id:guid}")]
         [ValidationFilter]
         [Authorize]
-        public async Task<IActionResult> Update([FromRoute] Guid id,[FromBody] CreatePostDto postDto){
+        public async Task<IActionResult> Update([FromRoute] Guid id,[FromBody] CreatePostDto postDto){           
             var post = await postService.Get(id);
             if(post.Id == Guid.Empty){
                 return NotFound();              
+            }
+            var UserId = User.Claims.FirstOrDefault(claim => claim.Type == "Id");
+            if(post.Creator.Id.ToString() != UserId.Value){
+                return Forbid();
             }
             var user = await userService.Get(postDto.UserId);
             if(user.Id == Guid.Empty){
@@ -76,8 +84,14 @@ namespace MyApp.Namespace
         [HttpDelete("{id:guid}")]
         [Authorize]
         public async Task<IActionResult> Delete(Guid id){
-            if((await postService.Get(id)).Id == Guid.Empty){
+            
+            var post = await postService.Get(id);
+            if(post.Id == Guid.Empty){
                 return NotFound();
+            }
+            var UserId = User.Claims.FirstOrDefault(claim => claim.Type == "Id");
+            if(post.Creator.Id.ToString() != UserId.Value){
+                return Forbid();
             }
             await postService.Delete(id);
             return Ok();
