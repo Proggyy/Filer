@@ -1,7 +1,7 @@
 using Filer.Api.DTOs;
 using Filer.Api.Filters;
 using Filer.Application.Interfaces;
-using Filer.Domain.Parameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MyApp.Namespace
@@ -28,6 +28,22 @@ namespace MyApp.Namespace
                 return NotFound();
             }
             return Ok(token);
+        }
+        [HttpPost("whoami")]
+        [Authorize]
+        public async Task<IActionResult> WhoAmI(){
+            var UserIdClaim = User.Claims.FirstOrDefault(claim => claim.Type == "Id");
+            var userId = new Guid();
+            if(UserIdClaim == null || !Guid.TryParse(UserIdClaim.Value, out userId))
+            {
+                return NotFound();
+            }
+            
+            var user = await userService.Get(userId);
+            if(user.Id == Guid.Empty){
+                return NotFound();
+            }
+            return Ok(user.Login);
         }
     }
 }
