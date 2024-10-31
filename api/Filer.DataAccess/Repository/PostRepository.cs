@@ -52,6 +52,7 @@ public class PostRepository : IPostRepository{
     public async Task<PagedList<Post>> GetAll(PostParameters postParameters)
     {
         var list = await postContext.PostEntities.Include(p => p.UserEntity).AsNoTracking()
+        .Where(u => postParameters.UserId != Guid.Empty ? u.UserId == postParameters.UserId : true)
         .Search(postParameters.SearchTerm, false)
         .Select(post => post.HasImage ? 
         Post.CreatePost(post.Id, post.Tag!, post.ImagePath, post.Description, post.CreationDate, User.CreateUser(post.UserEntity!.Id, post.UserEntity.UserName!, post.UserEntity.Login!)) 
