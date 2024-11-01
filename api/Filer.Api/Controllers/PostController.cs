@@ -46,7 +46,7 @@ namespace MyApp.Namespace
         [Authorize]
         public async Task<IActionResult> Create([FromBody]CreatePostDto postDto){
             var UserId = User.Claims.FirstOrDefault(claim => claim.Type == "Id");
-            if(postDto.UserId.ToString() != UserId.Value){
+            if(UserId == null || postDto.UserId.ToString() != UserId.Value){
                 return Forbid();
             }
             var user = await userService.Get(postDto.UserId);
@@ -68,7 +68,7 @@ namespace MyApp.Namespace
                 return NotFound();              
             }
             var UserId = User.Claims.FirstOrDefault(claim => claim.Type == "Id");
-            if(post.Creator.Id.ToString() != UserId.Value){
+            if(UserId == null || post.Creator!.Id.ToString() != UserId.Value){
                 return Forbid();
             }
             var user = await userService.Get(postDto.UserId);
@@ -90,7 +90,7 @@ namespace MyApp.Namespace
                 return NotFound();
             }
             var UserId = User.Claims.FirstOrDefault(claim => claim.Type == "Id");
-            if(post.Creator.Id.ToString() != UserId.Value){
+            if(UserId == null || post.Creator!.Id.ToString() != UserId.Value){
                 return Forbid();
             }
             await postService.Delete(id);

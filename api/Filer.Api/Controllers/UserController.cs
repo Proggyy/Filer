@@ -43,7 +43,7 @@ namespace MyApp.Namespace
         [Authorize]
         public async Task<IActionResult> Update([FromRoute] Guid id,[FromBody] CreateUserDto userDto){
             var UserId = User.Claims.FirstOrDefault(claim => claim.Type == "Id");
-            if(id.ToString() != UserId.Value){
+            if(UserId == null || id.ToString() != UserId.Value){
                 return Forbid();
             }
             var user = await userService.Get(id);
@@ -60,7 +60,7 @@ namespace MyApp.Namespace
         [Authorize]
         public async Task<IActionResult> Delete(Guid id){
             var UserId = User.Claims.FirstOrDefault(claim => claim.Type == "Id");
-            if(id.ToString() != UserId.Value){
+            if(UserId == null || id.ToString() != UserId.Value){
                 return Forbid();
             }
             if((await userService.Get(id)).Id == Guid.Empty){
