@@ -13,5 +13,7 @@ public class UserEntity{
     public string? Login { get; set;}
     [Required]
     public string? PasswordHash { get; set;}
+    public string? RefreshToken { get; set; }
+    public DateTimeOffset? RefreshTokenExpiryTime { get; set; }
     public List<PostEntity>? PostEntities { get; set; }
 }

@@ -29,16 +29,26 @@ public class UserRepository : IUserRepository
 
     public async Task<User> Get(Guid id)
     {
-        var post = await postContext.UserEntities.FirstOrDefaultAsync(u => u.Id == id);
-        if (post != null)
+        var user = await postContext.UserEntities.FirstOrDefaultAsync(u => u.Id == id);
+        if (user != null)
         {
-            return User.CreateUser(post.Id, post.UserName!, post.Login!);
+            return User.CreateUser(user.Id, user.UserName!, user.Login!);
         }
         else{
             return new User();
         }
     }
-
+        public async Task<User> GetWithRefresh(Guid id)
+    {
+        var user = await postContext.UserEntities.FirstOrDefaultAsync(u => u.Id == id);
+        if (user != null)
+        {
+            return User.CreateLoginUser(user.Id, user.UserName!, user.Login!, user.PasswordHash, user.RefreshToken, user.RefreshTokenExpiryTime);
+        }
+        else{
+            return new User();
+        }
+    }
     public async Task<PagedList<User>> GetAll(UserParameters userParameters)
     {
         var list = await postContext.UserEntities.AsNoTracking()
@@ -72,6 +82,8 @@ public class UserRepository : IUserRepository
         if(user != null){
             user.Login = entity.Login;
             user.UserName = entity.UserName;
+            user.RefreshToken = entity.RefreshToken;
+            user.RefreshTokenExpiryTime = entity.RefreshTokenExpiryTime;
             postContext.UserEntities.Update(user);
         }
     }

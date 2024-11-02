@@ -1,6 +1,7 @@
 using Filer.Api.DTOs;
 using Filer.Api.Filters;
 using Filer.Application.Interfaces;
+using Filer.Domain.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,12 +25,9 @@ namespace MyApp.Namespace
         [ValidationFilter]
         public async Task<IActionResult> Login(LoginUserDto registerUserDto){
             var token = await userService.LoginUser(registerUserDto.Login,registerUserDto.Password);
-            if(token == ""){
-                return NotFound();
-            }
             return Ok(token);
         }
-        [HttpPost("whoami")]
+        [HttpGet("whoami")]
         [Authorize]
         public async Task<IActionResult> WhoAmI(){
             var UserIdClaim = User.Claims.FirstOrDefault(claim => claim.Type == "Id");
@@ -44,6 +42,13 @@ namespace MyApp.Namespace
                 return NotFound();
             }
             return Ok(user.Login);
+        }
+
+        [HttpPost("refresh")]
+        [ValidationFilter]
+        public async Task<IActionResult> Resfresh([FromBody] TokenDto tokenDto){
+            var token = await userService.Refresh(tokenDto);
+            return Ok(token);
         }
     }
 }

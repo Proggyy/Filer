@@ -27,6 +27,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtProvider,JwtProvider>();
+builder.Services.AddScoped<IRefreshProvider,RefreshProvider>();
 
 var app = builder.Build();
 

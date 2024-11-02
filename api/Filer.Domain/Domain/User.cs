@@ -13,11 +13,18 @@ public class User{
     public string? Login { get; set;}
     [Required]
     public string? PasswordHash { get; set;}
+    public string? RefreshToken { get; set; }
+    public DateTimeOffset? RefreshTokenExpiryTime { get; set; }
     public static User CreateUser(Guid id, string userName, string login){
         return new User{Id = id, UserName = userName,Login = login};
     }
     public static User CreateNewUser(Guid id, string userName, string login, string passwordHash)
     {
         return new User{Id = id, UserName = userName,Login = login, PasswordHash = passwordHash};
+    }
+
+    public static User CreateLoginUser(Guid id, string userName, string login, string passwordHash, string refreshToken, DateTimeOffset? expiryDate)
+    {
+        return new User{Id = id, UserName = userName,Login = login, PasswordHash = passwordHash, RefreshToken = refreshToken, RefreshTokenExpiryTime = expiryDate};
     }
 }

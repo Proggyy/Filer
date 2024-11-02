@@ -13,11 +13,13 @@ public class UserService : IUserService
     private readonly IUserRepository userRepository;
     private readonly IPasswordHasher passwordHasher;
     private readonly IJwtProvider jwtProvider;
-    public UserService(IUserRepository userRepository, IPasswordHasher passwordHasher, IJwtProvider jwtProvider)
+    private readonly IRefreshProvider refreshProvider;
+    public UserService(IUserRepository userRepository, IPasswordHasher passwordHasher, IJwtProvider jwtProvider, IRefreshProvider refreshProvider)
     {
         this.userRepository = userRepository;
         this.passwordHasher = passwordHasher;
         this.jwtProvider = jwtProvider;
+        this.refreshProvider = refreshProvider;
     }
     public async Task Create(User user)
     {
@@ -73,14 +75,39 @@ public class UserService : IUserService
         return true;       
     }
 
-    public async Task<string> LoginUser(string login, string password)
+    public async Task<TokenDto> LoginUser(string login, string password)
     {
         var registred = await userRepository.GetByLogin(login);
         var hash = passwordHasher.Hash(password);
         if(registred.Id != Guid.Empty && registred.PasswordHash == hash)
         {
-            return jwtProvider.GenerateToken(registred);
+            return await UpdateToken(registred);           
         }
-        return "";
+        throw new UnauthorizedException();
+    }
+
+    public async Task<TokenDto> Refresh(TokenDto tokenDto)
+    {
+        var principal = refreshProvider.GetClaimsPrincipalFromToken(tokenDto.AccessToken);
+        Guid id;
+        var claimId = principal.Claims.FirstOrDefault(x => x.Type == "Id");
+        if(claimId != null && Guid.TryParse(claimId.Value, out id)){
+            var user = await userRepository.GetWithRefresh(id);
+            if(user.Id == Guid.Empty || user.RefreshToken != tokenDto.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now){
+                throw new RefreshTokenBadRequestException(); 
+            }
+            return await UpdateToken(user);
+        }
+        throw new RefreshTokenBadRequestException(); 
+    }
+
+    private async Task<TokenDto> UpdateToken(User user){
+            var refresh = refreshProvider.GenerateRefreshToken();
+            user.RefreshToken = refresh;
+            user.RefreshTokenExpiryTime = DateTimeOffset.Now.ToUniversalTime().AddDays(7);
+            await userRepository.Update(user);
+            await userRepository.Save();
+            var jwt = jwtProvider.GenerateToken(user);
+            return new TokenDto(jwt, refresh);
     }
 }
