@@ -7,12 +7,6 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
 {
     public void Configure(EntityTypeBuilder<UserEntity> builder)
     {
-        builder.HasData(new UserEntity{
-            Id = Guid.NewGuid(),
-            Login = "Test",
-            UserName = "Test",
-            PasswordHash = "11111"
-            }
-        );
+        builder.HasIndex(x => x.Login).IsUnique();
     }
 }
