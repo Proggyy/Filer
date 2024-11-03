@@ -6,7 +6,4 @@ namespace Filer.Application.Interfaces;
 
 public interface IUserService : IService<User>{
     Task<PagedList<User>> GetAll(UserParameters userParameters);
-    Task<bool> RegisterNewUser(string login, string name, string password);
-    Task<TokenDto> LoginUser(string login, string password);
-    Task<TokenDto> Refresh(TokenDto tokenDto);
 }

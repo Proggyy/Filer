@@ -11,20 +11,22 @@ namespace MyApp.Namespace
     [ApiController]
     public class AuthController : ControllerBase{
         private readonly IUserService userService;
-        public AuthController(IUserService userService)
+        private readonly IAuthService authService;
+        public AuthController(IUserService userService, IAuthService authService)
         {
             this.userService = userService;
+            this.authService = authService;
         }
         [HttpPost("register")]
         [ValidationFilter]
         public async Task<IActionResult> Register(RegisterUserDto registerUserDto){
-            bool isSucces = await userService.RegisterNewUser(registerUserDto.Login,registerUserDto.UserName,registerUserDto.Password);
+            bool isSucces = await authService.RegisterNewUser(registerUserDto.Login,registerUserDto.UserName,registerUserDto.Password);
             return Ok(isSucces);
         }
         [HttpPost("login")]
         [ValidationFilter]
         public async Task<IActionResult> Login(LoginUserDto registerUserDto){
-            var token = await userService.LoginUser(registerUserDto.Login,registerUserDto.Password);
+            var token = await authService.LoginUser(registerUserDto.Login,registerUserDto.Password);
             return Ok(token);
         }
         [HttpGet("whoami")]
@@ -47,7 +49,7 @@ namespace MyApp.Namespace
         [HttpPost("refresh")]
         [ValidationFilter]
         public async Task<IActionResult> Resfresh([FromBody] TokenDto tokenDto){
-            var token = await userService.Refresh(tokenDto);
+            var token = await authService.Refresh(tokenDto);
             return Ok(token);
         }
     }

@@ -28,6 +28,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtProvider,JwtProvider>();
 builder.Services.AddScoped<IRefreshProvider,RefreshProvider>();
+builder.Services.AddScoped<IAuthService,AuthService>();
 
 var app = builder.Build();
 
