@@ -39,7 +39,7 @@ input:-webkit-autofill{
     margin: 0 auto;
     user-select: none;
 }
-.frame button{
+.frame input[type="submit"]{
     height: 8vh;
     border-radius: 4vh;
     border: 0.3vw solid #498a35;
@@ -52,10 +52,13 @@ input:-webkit-autofill{
     transition: ease-in 0.2s background;
     user-select: none;
 }
-.frame button:hover{
+.frame input[type="submit"]:hover{
     background: #28aa01;
 }
 h1{
     margin: 0 auto;
     user-select: none;
+}
+.errorText{
+    color: red;
 }
