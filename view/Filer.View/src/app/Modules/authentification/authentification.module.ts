@@ -5,6 +5,7 @@ import { AppRoutingModule } from '../../app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { AuthService } from '../../Services/auth.service';
+import { CookieService } from '../../Services/cookie.service';
 
 
 
@@ -16,7 +17,7 @@ import { AuthService } from '../../Services/auth.service';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, CookieService],
   bootstrap: [LoginComponent]
 })
 export class AuthentificationModule { }
