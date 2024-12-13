@@ -3,6 +3,7 @@ import { AuthService } from '../../../Services/auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CookieService } from '../../../Services/cookie.service';
+import { config } from '../../../../../config';
 
 @Component({
   selector: 'app-login',
@@ -26,7 +27,7 @@ export class LoginComponent {
       this.form.get("password")?.value)
       .pipe().subscribe({next: (data) => {
         if(data.accessToken != ""){
-        this.cookie.setCookie("Token",data.accessToken, 5 * 60 * 60);
+        this.cookie.setCookie(config.TokenName,data.accessToken, 5 * 60 * 60);
         this.router.navigate(["/main"]);
       }    
     }});
