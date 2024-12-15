@@ -12,6 +12,7 @@ namespace Filer.Infrastructure.JWT;
 public class JwtProvider : IJwtProvider
 {
     private readonly IOptions<AuthOptions> options;
+    public int ExpiresHours => options.Value.ExpiresHours;
     public JwtProvider(IOptions<AuthOptions> options)
     {
         this.options = options;

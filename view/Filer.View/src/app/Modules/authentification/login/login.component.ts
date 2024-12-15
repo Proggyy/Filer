@@ -22,15 +22,6 @@ export class LoginComponent {
     if(!this.form.valid){
       this.errorText = "error";
     }
-    this.auth.Login(
-      this.form.get("login")?.value,
-      this.form.get("password")?.value)
-      .pipe().subscribe({next: (data) => {
-        if(data.accessToken != ""){
-        this.cookie.setCookie(config.TokenName,data.accessToken, 5 * 60 * 60);
-        this.router.navigate(["/main"]);
-      }    
-    }});
-
+    this.auth.Login(this.form.get("login")?.value, this.form.get("password")?.value);
   }
 }

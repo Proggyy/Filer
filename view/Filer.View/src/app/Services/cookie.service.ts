@@ -23,10 +23,12 @@ export class CookieService {
       updatedCookie += "; " + optionKey;
       let optionValue = options[optionKey];
       updatedCookie += "=" + optionValue;
-    }
-  
+    } 
     document.cookie = updatedCookie;
-    console.log(updatedCookie);
+  }
+
+  clearCookie(cookieName: string){
+    this.setCookie(cookieName, "", -1)
   }
 }
 

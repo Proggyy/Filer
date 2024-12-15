@@ -63,7 +63,7 @@ public class AuthService : IAuthService
     private async Task<TokenDto> UpdateToken(User user){
             var refresh = refreshProvider.GenerateRefreshToken();
             user.RefreshToken = refresh;
-            user.RefreshTokenExpiryTime = DateTimeOffset.Now.ToUniversalTime().AddDays(7);
+            user.RefreshTokenExpiryTime = DateTimeOffset.Now.ToUniversalTime().AddHours(jwtProvider.ExpiresHours);
             await userRepository.Update(user);
             await userRepository.Save();
             var jwt = jwtProvider.GenerateToken(user);
