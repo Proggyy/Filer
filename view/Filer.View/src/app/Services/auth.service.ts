@@ -2,9 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import {config} from '../../../config';
-import { CookieService } from './cookie.service';
+import { CookieService, CookieType } from './cookie.service';
 import { Router } from '@angular/router';
-import { AuthentificationModule } from '../Modules/authentification/authentification.module';
 
 @Injectable({
   providedIn: 'root'
@@ -57,8 +56,8 @@ export class AuthService {
   
   SaveToken(data:TokenResponse){
     let expires = config.ExpiresHours * 60 * 60;
-    this.cookie.setCookie(config.TokenName,data.AccessToken, expires);
-    this.cookie.setCookie(config.RefreshName,data.RefreshToken, expires);
+    this.cookie.setCookie(config.TokenName,data.AccessToken, expires, CookieType.Auth);
+    this.cookie.setCookie(config.RefreshName,data.RefreshToken, expires, CookieType.Auth);
   }
 }
 
