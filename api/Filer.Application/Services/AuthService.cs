@@ -42,7 +42,7 @@ public class AuthService : IAuthService
         {
             return await UpdateToken(registred);           
         }
-        throw new UnauthorizedException();
+        return new TokenDto("","");
     }
 
     public async Task<TokenDto> Refresh(TokenDto tokenDto)

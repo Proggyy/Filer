@@ -37,6 +37,11 @@ export class LoginComponent {
       this.errorText = "Ошибка";
       return;
     }
-    this.auth.Login(this.form.get("login")?.value, this.form.get("password")?.value);
+    this.auth.Login(this.form.get("login")?.value, this.form.get("password")?.value)
+    .subscribe(succes => {
+      if(!succes){
+        this.errorText = "Попытка входа не удалась.";
+      }
+    });
   }
 }

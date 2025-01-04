@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import {config} from '../../../config';
 import { CookieService, CookieType } from './cookie.service';
 import { Router } from '@angular/router';
@@ -11,22 +11,28 @@ import { Router } from '@angular/router';
 export class AuthService {
   constructor(private http: HttpClient, private cookie: CookieService, private router: Router){}
 
-  Login(login: string, password: string){
-    this.http.post<TokenResponse>(config.ApiUri + "api/auth/login",
+  Login(login: string, password: string): Observable<boolean>{
+    return this.http.post<TokenResponse>(config.ApiUri + "api/auth/login",
       {"Login": login, "Password": password})
-    .pipe().subscribe({next: (data:any) => {
-      if(data.AccessToken != ""){
-        let formatData:TokenResponse = {AccessToken: data.accessToken, RefreshToken: data.refreshToken}
-        this.SaveToken(formatData);
-        this.router.navigate(["/main"]);
-    }
-  }});
+      .pipe(map((data:any) => {
+        if(data.accessToken != ""){
+          let formatData:TokenResponse = {AccessToken: data.accessToken, RefreshToken: data.refreshToken}
+          this.SaveToken(formatData);
+          this.router.navigate(["/main"]);
+          return true;
+        }
+        return false;
+      }));
   }
 
-  Register(login: string, userName: string,password: string) : Observable<any>{
-    var istrue = this.http.post(config.ApiUri + "api/auth/register",
-      {"Login": login, "UserName": userName,"Password": password});
-    return istrue;
+  Register(login: string, userName: string,password: string): Observable<boolean>{
+    return this.http.post<boolean>(config.ApiUri + "api/auth/register",
+      {"Login": login, "UserName": userName,"Password": password}).pipe(map((succes:boolean) => {
+        if(succes){
+          this.router.navigate(["/login"]);
+        }
+        return succes;
+      }));
   }
 
   RefreshToken(token: TokenResponse): Observable<TokenResponse>{

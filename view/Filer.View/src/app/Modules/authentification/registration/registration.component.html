@@ -1,0 +1,13 @@
+<div class="background">
+    <form class="frame" [formGroup]="form">
+     <h1>Вход</h1>
+     <i class="errorText" *ngIf="errorText.length != 0">{{errorText}}</i>
+     <label for="login">Логин</label>
+     <input maxlength="50" (keyup)="onTyping()" type="text" id="login" formControlName="login" placeholder="Введите пароль здесь..." />
+     <label for="username">Имя пользователя</label>
+     <input maxlength="50" (keyup)="onTyping()" type="text" id="username" formControlName="username" placeholder="Введите пароль здесь..." />
+     <label for="password">Пароль</label>
+     <input maxlength="50" (keyup)="onTyping()" type="password" id="password" formControlName="password" placeholder="Введите пароль здесь..." />
+     <input type="submit" value="Регистрация" (click)="Registry()"/>
+    </form> 
+ </div>

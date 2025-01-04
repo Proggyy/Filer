@@ -6,11 +6,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { AuthService } from '../../Services/auth.service';
 import { CookieService } from '../../Services/cookie.service';
+import { RegistrationComponent } from './registration/registration.component';
 
 
 
 @NgModule({
-  declarations: [LoginComponent],
+  declarations: [LoginComponent, RegistrationComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -18,6 +19,6 @@ import { CookieService } from '../../Services/cookie.service';
     ReactiveFormsModule
   ],
   providers: [AuthService, CookieService],
-  bootstrap: [LoginComponent]
+  bootstrap: [LoginComponent, RegistrationComponent]
 })
 export class AuthentificationModule { }
