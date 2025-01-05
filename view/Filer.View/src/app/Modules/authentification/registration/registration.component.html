@@ -1,11 +1,14 @@
-<div class="background">
+<div class="fixedHeader">
+    <a class="a-nav" routerLink="/login">&larr;Вход</a>
+</div>
+<div class="centred">   
     <form class="frame" [formGroup]="form">
      <h1>Регистрация</h1>
      <i class="errorText" *ngIf="errorText.length != 0">{{errorText}}</i>
      <label for="login">Логин</label>
-     <input maxlength="50" (keyup)="onTyping()" type="text" id="login" formControlName="login" placeholder="Введите пароль здесь..." />
+     <input maxlength="50" (keyup)="onTyping()" type="text" id="login" formControlName="login" placeholder="Введите логин здесь..." />
      <label for="username">Имя пользователя</label>
-     <input maxlength="50" (keyup)="onTyping()" type="text" id="username" formControlName="username" placeholder="Введите пароль здесь..." />
+     <input maxlength="50" (keyup)="onTyping()" type="text" id="username" formControlName="username" placeholder="Введите имя здесь..." />
      <label for="password">Пароль</label>
      <input maxlength="50" (keyup)="onTyping()" type="password" id="password" formControlName="password" placeholder="Введите пароль здесь..." />
      <input type="submit" value="Регистрация" (click)="Registry()"/>
