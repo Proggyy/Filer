@@ -5,7 +5,7 @@ import { AuthService } from '../../../Services/auth.service';
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
-  styleUrl: './registration.component.css'
+  styleUrls: ['./../authentification.styles.css','./registration.component.css']
 })
 export class RegistrationComponent {
 constructor(private auth: AuthService) {}

@@ -5,7 +5,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: ['./../authentification.styles.css','./login.component.css']
 })
 export class LoginComponent {
   constructor(private auth: AuthService) {}
