@@ -6,10 +6,10 @@ import { MainComponent } from './Components/main/main.component';
 import { RegistrationComponent } from './Modules/authentification/registration/registration.component';
 
 const routes: Routes = [
-  //{path: "", component: MainComponent},
   {path: "main", component: MainComponent, canActivate: [isLoggedGuard]},
   {path: "login", component: LoginComponent},
-  {path: "registry", component: RegistrationComponent}
+  {path: "registry", component: RegistrationComponent},
+  {path: "**", redirectTo: "main"}
   ];
 
 @NgModule({
