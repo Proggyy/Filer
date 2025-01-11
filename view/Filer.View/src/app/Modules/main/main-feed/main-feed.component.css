@@ -1,0 +1,52 @@
+:host{
+    display: block;
+    width: 100%;
+}
+#feed-frame{
+    display: flex;
+    flex-direction: column;
+    border-radius: 3vh;
+    box-shadow: 0 5px 10px grey;
+    background: #eafcff;
+    width: 100%;
+    height: 100%;
+}
+#feed-header{
+    width: 100%;
+    background: rgb(117, 129, 255);
+    box-shadow: 0 0 10px 0 grey;
+    height: 7vh;
+    border-radius: 3vh 3vh 0 0;
+}
+#feed-footer{
+    width: 100%;
+    background: rgb(117, 129, 255);
+    box-shadow: 0 0 10px 0 grey;
+    height: 7vh;
+    border-radius: 0 0 3vh 3vh;
+}
+#feed{
+    height: calc(100% - 14vh);
+    padding: 1vh;
+    display: flex;
+    gap: 1vh;
+    flex-direction: row;
+    overflow-y: scroll;
+    flex-wrap: wrap;
+    
+}
+#feed::-webkit-scrollbar{
+    background: transparent;
+    width: 1vh;
+}
+#feed::-webkit-scrollbar-thumb{
+    background: grey;
+    opacity: 0.5;
+    border-radius: 2vh;
+    
+}
+.message{
+    height: 100px;
+    width: 100%;
+    background: blue;
+}

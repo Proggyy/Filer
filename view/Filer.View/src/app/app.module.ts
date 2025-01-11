@@ -5,6 +5,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { AuthentificationModule } from './Modules/authentification/authentification.module';
 import { authTokenInterceptor } from './Authorization/auth-token.interceptor';
 import { MainComponent } from './Components/main/main.component';
+import { MainModule } from './Modules/main/main.module';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { MainComponent } from './Components/main/main.component';
   ],
   imports: [
     AppRoutingModule,
-    AuthentificationModule
+    AuthentificationModule,
+    MainModule
   ],
   providers: [provideHttpClient(withInterceptors([authTokenInterceptor]))],
   bootstrap: [AppComponent]
