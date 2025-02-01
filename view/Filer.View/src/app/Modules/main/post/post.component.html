@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="post">
+        <div class="avatar">
+            <img src="./test.png">
+        </div>
+        <div class="post-title">
+            <h3>{{tag}}</h3>
+        </div>
+        <div class="post-content">
+            <div #postText class="post-text" [ngClass]="{hide:!isExpanded}">
+                <ng-content></ng-content>
+            </div>
+            <div *ngIf="!isExpanded && postText.innerHTML.length > 250" class="expand" (click)="expand()">Развернуть...</div>
+            <img src="./test.png">
+        </div>      
+    </div>
+    <div class="post-tools">
+        <button>&times;</button>
+        <button>➥</button>
+    </div>
+</div>

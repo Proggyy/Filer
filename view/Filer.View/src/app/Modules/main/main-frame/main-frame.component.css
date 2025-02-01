@@ -11,7 +11,6 @@
     flex-direction: row;
     border-radius: 3vh;
     box-shadow: 0 5px 10px grey;
-    padding: 3vh;
     margin: 3vh;
     width: 100%;
     font-family: var(--default-font);

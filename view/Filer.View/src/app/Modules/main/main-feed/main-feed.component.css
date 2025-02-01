@@ -7,32 +7,32 @@
     flex-direction: column;
     border-radius: 3vh;
     box-shadow: 0 5px 10px grey;
-    background: #eafcff;
+    background: #dfd2d2;
     width: 100%;
     height: 100%;
 }
 #feed-header{
     width: 100%;
-    background: rgb(117, 129, 255);
+    background: #fdf0f0;
     box-shadow: 0 0 10px 0 grey;
     height: 7vh;
     border-radius: 3vh 3vh 0 0;
 }
 #feed-footer{
     width: 100%;
-    background: rgb(117, 129, 255);
+    background: #fdf0f0;
     box-shadow: 0 0 10px 0 grey;
-    height: 7vh;
+    height: 10vh;
     border-radius: 0 0 3vh 3vh;
 }
 #feed{
     height: calc(100% - 14vh);
-    padding: 1vh;
+    padding: 3vh;
     display: flex;
     gap: 1vh;
-    flex-direction: row;
+    flex-direction: column;
     overflow-y: scroll;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     
 }
 #feed::-webkit-scrollbar{
@@ -44,9 +44,4 @@
     opacity: 0.5;
     border-radius: 2vh;
     
-}
-.message{
-    height: 100px;
-    width: 100%;
-    background: blue;
 }
